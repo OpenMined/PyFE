@@ -1,8 +1,8 @@
 from charm.toolbox.pairinggroup import PairingGroup, ZR, G1, G2, pair
 
-from keys import PublicKey, MasterKey
-from utils import fast_exp_const_time
-from vectors import Vector, EncryptedVector
+from fe.keys import PublicKey, MasterKey
+from fe.utils import fast_exp_const_time
+from fe.vectors import Vector, EncryptedVector
 
 class Scheme:
     def __init__(self):

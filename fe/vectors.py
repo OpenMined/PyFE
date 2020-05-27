@@ -1,4 +1,4 @@
-from utils import is_array, is_scalar
+from fe.utils import is_array, is_scalar
 
 class Vector:
     def __init__(self, array=None):
