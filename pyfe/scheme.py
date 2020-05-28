@@ -1,3 +1,5 @@
+import numpy as np
+
 from charm.toolbox.pairinggroup import PairingGroup, ZR, G1, G2, pair
 
 from pyfe.keys import PublicKey, MasterKey
@@ -5,7 +7,17 @@ from pyfe.utils import fast_exp_const_time
 from pyfe.vectors import Vector, EncryptedVector
 
 class Scheme:
+    """
+    Scheme is the class that setups the public and master key, and also
+    generates secret key for function evaluation(pending). It holds the method that encrypts
+    the Vector
+    """
+
     def __init__(self):
+        """
+        Initiate the Scheme object
+        """
+
         self.group = PairingGroup('MNT159')
 
         self.g1 = self.group.random(G1)
@@ -14,6 +26,10 @@ class Scheme:
         self.gt = pair(self.g1, self.g2)
 
     def setup(self, vector_length=1):
+        """
+        Generates the public key and the master key
+        """
+
         assert vector_length>0, "Vector size must be positive"
 
         s = [self.group.random(ZR) for i in range(vector_length+1)]
@@ -27,6 +43,13 @@ class Scheme:
         return (pk, msk)
 
     def encrypt(self, pk, vector):
+        """
+        Encrypts the vector object and generates EncryptedVector
+        Args:
+            pk: PublicKey, public key to be used for encryption
+            vector: Vector, data to be encrypted
+        """
+        
         assert (
             pk.n == vector.n + 1
         ), (
@@ -35,6 +58,10 @@ class Scheme:
                 pk.n - 1
             )
         )
+
+        v_min = vector.min()
+        v_max = vector.max()
+
         gamma = self.group.random(ZR)
         a = self.group.random(ZR)
         b = self.group.random(ZR)
@@ -51,10 +78,10 @@ class Scheme:
         g1_invb = self.g1 ** inv_b
         g2_a = self.g2 ** a
         g2_c = self.g2 ** c
-        exp_g1_inva = fast_exp_const_time(g1_inva, vector.content, 0, 255)
-        exp_g1_invb = fast_exp_const_time(g1_invb, vector.content, 0, 255)
-        exp_g2_a = fast_exp_const_time(g2_a, vector.content, 0, 255)
-        exp_g2_c = fast_exp_const_time(g2_c, vector.content, 0, 255)
+        exp_g1_inva = fast_exp_const_time(g1_inva, vector.content, v_min, v_max)
+        exp_g1_invb = fast_exp_const_time(g1_invb, vector.content, v_min, v_max)
+        exp_g2_a = fast_exp_const_time(g2_a, vector.content, v_min, v_max)
+        exp_g2_c = fast_exp_const_time(g2_c, vector.content, v_min, v_max)
         left = [  # bias term
             [
                 g1_inva * (pk.h1[0] ** (gamma * inv_c)),
