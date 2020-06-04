@@ -8,6 +8,8 @@ class PublicKey:
         self.h1 = h1
         self.h2 = h2
 
+    def __len__(self):
+        return self.n
 
 class MasterKey(PublicKey):
     """
