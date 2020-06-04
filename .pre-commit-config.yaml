@@ -1,0 +1,66 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.1.0
+    hooks:
+      - id: debug-statements
+      - id: check-docstring-first
+      - id: double-quote-string-fixer
+      - id: end-of-file-fixer
+      - id: check-merge-conflict
+      - id: check-json
+      - id: check-added-large-files
+      - id: check-yaml
+      - id: name-tests-test
+      - id: requirements-txt-fixer
+
+  - repo: https://github.com/myint/autoflake.git
+    rev: b330072a26bb13aea8843f8083cee5332d71f78f
+    hooks:
+      - id: autoflake
+        args: ['--in-place', '--remove-all-unused-imports', '--remove-unused-variable', '--expand-star-imports', '--ignore-init-module-imports']
+
+  - repo: https://github.com/asottile/seed-isort-config
+    rev: v2.1.1
+    hooks:
+      - id: seed-isort-config
+
+  - repo: https://github.com/timothycrosley/isort
+    rev: 4.3.21
+    hooks:
+      - id: isort
+
+  - repo: https://github.com/myint/docformatter.git
+    rev: v1.3.1
+    hooks:
+      - id: docformatter
+        args: ['--in-place', '--blank', '--make-summary-multi-line', '--pre-summary-newline']
+
+  - repo: https://github.com/psf/black
+    rev: stable
+    hooks:
+      - id: black
+        args: ['-S']
+
+  - repo: https://github.com/pre-commit/pygrep-hooks
+    rev: v1.5.0
+    hooks:
+      - id: python-use-type-annotations
+
+  - repo: local
+    hooks:
+      - id: flynt
+        name: flynt
+        entry: flynt
+        args: [--fail-on-change]
+        types: [python]
+        language: python
+        additional_dependencies:
+          - flynt
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.1.0
+    hooks:
+      - id: flake8
+      - id: trailing-whitespace
+      - id: mixed-line-ending
+        args: ['--fix=lf']

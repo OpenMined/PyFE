@@ -1,0 +1,17 @@
+[tool.black]
+target-version = ['py36']
+line-length = 100
+skip-string-normalization = 'true'
+exclude = '''
+(
+    \.git
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | \.eggs\/
+    | build
+    | dist
+    | venv\/
+    | test_serde_full\.py
+)
+'''
