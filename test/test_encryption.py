@@ -1,17 +1,23 @@
 import numpy as np
-from pyfe.scheme import Scheme
-from pyfe.vectors import EncryptedVector
+
+from pyfe.context import Context
+from pyfe.key_generator import KeyGenerator
+from pyfe.encryptor import Encryptor
+from pyfe.encrypted_vector import EncryptedVector
 
 def test_encryption():
     """
         Test encryption of list and numpy array
     """
-    scheme = Scheme()
+    context = Context()
 
     x = [1,2,3,4]
 
-    pk, msk = scheme.setup(vector_length=len(x))
-    x_enc = scheme.encrypt(pk, x)
+    key_generator = KeyGenerator(context)
+    pk, msk = key_generator.setup(vector_length=len(x))
+
+    encryptor = Encryptor(context, pk)
+    x_enc = encryptor.encrypt(x)
 
     # This is purely observational, just for sake of having a test case
     # TODO: Add robust test case
@@ -20,9 +26,11 @@ def test_encryption():
 
     x = np.array([1.,2.,3.])
 
-    # We can reuse the scheme
-    pk, msk = scheme.setup(vector_length=len(x))
-    x_enc = scheme.encrypt(pk, x)
+    key_generator = KeyGenerator(context)
+    pk, msk = key_generator.setup(vector_length=len(x))
+
+    encryptor = Encryptor(context, pk)
+    x_enc = encryptor.encrypt(x)
 
     assert isinstance(x_enc, EncryptedVector)
     assert x_enc.n - len(x) == 1

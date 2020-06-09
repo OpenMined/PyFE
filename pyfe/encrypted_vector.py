@@ -2,7 +2,7 @@ from pyfe.utils import is_array
 
 class EncryptedVector:
     """
-        Encryption of vector
+        Data-structure to store the encryption of the vector
     """
     def __init__(self, group=None, simplifier=None, left=None, right=None):
         assert left
