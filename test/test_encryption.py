@@ -1,17 +1,18 @@
 import numpy as np
 
 from pyfe.context import Context
-from pyfe.key_generator import KeyGenerator
-from pyfe.encryptor import Encryptor
 from pyfe.encrypted_vector import EncryptedVector
+from pyfe.encryptor import Encryptor
+from pyfe.key_generator import KeyGenerator
+
 
 def test_encryption():
     """
-        Test encryption of list and numpy array
+    Test encryption of list and numpy array.
     """
     context = Context()
 
-    x = [1,2,3,4]
+    x = [1, 2, 3, 4]
 
     key_generator = KeyGenerator(context)
     pk, msk = key_generator.setup(vector_length=len(x))
@@ -24,7 +25,7 @@ def test_encryption():
     assert isinstance(x_enc, EncryptedVector)
     assert x_enc.n - len(x) == 1
 
-    x = np.array([1.,2.,3.])
+    x = np.array([1.0, 2.0, 3.0])
 
     key_generator = KeyGenerator(context)
     pk, msk = key_generator.setup(vector_length=len(x))

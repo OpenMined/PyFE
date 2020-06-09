@@ -1,5 +1,4 @@
 import numpy
-
 from charm.toolbox.pairinggroup import ZR
 
 from pyfe.encrypted_vector import EncryptedVector
@@ -12,7 +11,6 @@ class Encryptor:
         self.context = context
         self.public_key = public_key
 
-
     def encrypt(self, plain_vector):
         """
         Encrypts the vector object and generates EncryptedVector
@@ -20,15 +18,14 @@ class Encryptor:
             plain_vector: data to be encrypted
         """
 
-        vector = numpy.array(plain_vector, dtype=numpy.int64) #dtype is just to convert float to int
+        vector = numpy.array(
+            plain_vector, dtype=numpy.int64
+        )  # dtype is just to convert float to int
 
         assert (
             len(self.public_key) == len(vector) + 1
-        ), (
-            'Vector has length {}, key is for length {}.'.format(
-                len(vector),
-                len(self.public_key) - 1
-            )
+        ), 'Vector has length {}, key is for length {}.'.format(
+            len(vector), len(self.public_key) - 1
         )
 
         v_min = numpy.min(vector).item()
@@ -57,31 +54,25 @@ class Encryptor:
         left = [  # bias term
             [
                 g1_inva * (self.public_key.h1[0] ** (gamma * inv_c)),
-                g1_invb * (self.public_key.h1[0] ** (gamma * inv_d))
+                g1_invb * (self.public_key.h1[0] ** (gamma * inv_d)),
             ]
         ]
         right = [  # bias term
-            [
-                g2_a * (self.public_key.h2[0] ** (-b)),
-                g2_c * (self.public_key.h2[0] ** (-d))
-            ]
+            [g2_a * (self.public_key.h2[0] ** (-b)), g2_c * (self.public_key.h2[0] ** (-d))]
         ]
         for i in range(1, self.public_key.n):
             left.append(
                 [
-                    exp_g1_inva[i-1] * (self.public_key.h1[i] ** (gamma * inv_c)),
-                    exp_g1_invb[i-1] * (self.public_key.h1[i] ** (gamma * inv_d))
+                    exp_g1_inva[i - 1] * (self.public_key.h1[i] ** (gamma * inv_c)),
+                    exp_g1_invb[i - 1] * (self.public_key.h1[i] ** (gamma * inv_d)),
                 ]
             )
             right.append(
                 [
-                    exp_g2_a[i-1] * (self.public_key.h2[i] ** (-b)),
-                    exp_g2_c[i-1] * (self.public_key.h2[i] ** (-d))
+                    exp_g2_a[i - 1] * (self.public_key.h2[i] ** (-b)),
+                    exp_g2_c[i - 1] * (self.public_key.h2[i] ** (-d)),
                 ]
             )
         return EncryptedVector(
-            group=self.context.group,
-            simplifier=self.context.g1 ** gamma,
-            left=left,
-            right=right,
+            group=self.context.group, simplifier=self.context.g1 ** gamma, left=left, right=right,
         )

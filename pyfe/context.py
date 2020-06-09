@@ -1,6 +1,10 @@
-from charm.toolbox.pairinggroup import PairingGroup, G1, G2, pair
+from charm.toolbox.pairinggroup import G1
+from charm.toolbox.pairinggroup import G2
+from charm.toolbox.pairinggroup import PairingGroup
+from charm.toolbox.pairinggroup import pair
 
-class  Context:
+
+class Context:
     def __init__(self):
         self.group = PairingGroup('MNT159')
 

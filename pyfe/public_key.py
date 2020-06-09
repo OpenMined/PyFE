@@ -1,7 +1,7 @@
 class PublicKey:
     def __init__(self, group=None, h1=None, h2=None):
         """
-        Holds the public key used for encryption
+        Holds the public key used for encryption.
         """
         self.group = group
         self.n = len(h1)
